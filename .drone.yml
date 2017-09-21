@@ -1,0 +1,6 @@
+pipeline:
+  publish:
+    image: plugins/docker
+    repo: tundraray/wordpress-nginx
+    tags:
+      - latest
