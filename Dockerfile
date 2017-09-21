@@ -234,7 +234,7 @@ ADD conf/nginx.conf /etc/nginx/nginx.conf
 # nginx site conf
 RUN mkdir -p /etc/nginx/sites-available/ && \
 mkdir -p /etc/nginx/sites-enabled/ 
-ADD conf/nginx-site.conf /etc/nginx/sites-available/default.conf
+ADD conf/nginx-wordpress.conf /etc/nginx/sites-available/default.conf
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 # tweak php-fpm config
