@@ -191,7 +191,7 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     #curl iconv session
     docker-php-ext-install -j$(nproc) pdo_mysql pdo_sqlite mysqli mcrypt gd exif intl xsl json soap dom zip opcache sockets gettext && \
     pecl install xdebug redis-3.1.3 imagick-3.4.3 libsodium-1.0.6 && \
-    && docker-php-ext-enable redis imagick libsodium \
+    docker-php-ext-enable redis imagick libsodium &&  \
     docker-php-source delete && \
     mkdir -p /etc/nginx && \
     mkdir -p /var/www/app && \
