@@ -158,11 +158,25 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log
 
+ENV PHPIZE_DEPS \
+    autoconf \
+    cmake \
+    file \
+    g++ \
+    gcc \
+    libc-dev \
+    pcre-dev \
+    make \
+    git \
+    pkgconf \
+    re2c
+
 RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
 #    sed -i -e "s/v3.4/edge/" /etc/apk/repositories && \
     echo /etc/apk/respositories && \
     apk update && \
-    apk add --no-cache bash \
+    apk add --no-cache  --virtual .build-deps bash \
+    $PHPIZE_DEPS \
     openssh-client \
     wget \
     supervisor \
