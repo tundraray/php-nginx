@@ -12,19 +12,6 @@ ENV DEVEL_KIT_MODULE_VERSION 0.3.0
 ENV LUAJIT_LIB=/usr/lib
 ENV LUAJIT_INC=/usr/include/luajit-2.0
 
-
-RUN apt-get update && apt-get install -y \
-        libicu-dev \
-        libmcrypt-dev \
-        libmagickwand-dev \
-        libsodium-dev \
-        --no-install-recommends && rm -r /var/lib/apt/lists/* \
-
-    && pecl install redis-3.1.3 imagick-3.4.3 libsodium-1.0.6 \
-    && docker-php-ext-enable redis imagick libsodium \
-    && docker-php-ext-install -j$(nproc) exif gettext intl mcrypt sockets zip
-
-# resolves #166
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 
@@ -199,8 +186,9 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
       --with-png-dir=/usr/include/ \
       --with-jpeg-dir=/usr/include/ && \
     #curl iconv session
-    docker-php-ext-install pdo_mysql pdo_sqlite mysqli mcrypt gd exif intl xsl json soap dom zip opcache && \
-    pecl install xdebug && \
+    docker-php-ext-install -j$(nproc) pdo_mysql pdo_sqlite mysqli mcrypt gd exif intl xsl json soap dom zip opcache sockets gettext && \
+    pecl install xdebug redis-3.1.3 imagick-3.4.3 libsodium-1.0.6 && \
+    && docker-php-ext-enable redis imagick libsodium \
     docker-php-source delete && \
     mkdir -p /etc/nginx && \
     mkdir -p /var/www/app && \
