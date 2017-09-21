@@ -174,13 +174,12 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     libmcrypt-dev \
     libpng-dev \
     icu-dev \
-    libicu-dev \
     libpq \
     libxslt-dev \
     libffi-dev \
     freetype-dev \
     sqlite-dev \
-    libmagickwand-dev \
+    imagemagick-dev \
     libsodium-dev \
     libjpeg-turbo-dev && \
     docker-php-ext-configure gd \
