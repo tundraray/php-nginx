@@ -2,7 +2,7 @@
 
 echo "Downloading ngx_pagespeed ${NGINX_PAGESPEED_VERSION} from https://github.com/pagespeed/ngx_pagespeed/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz..."
 
-wget -O - https://github.com/pagespeed/ngx_pagespeed/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz | tar zxf - -C /tmp
+wget -O - https://github.com/pagespeed/ngx_pagespeed/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz --no-check-certificate | tar zxf - -C /tmp
 
 PSOL_URL=$(cat "/tmp/ngx_pagespeed-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}/PSOL_BINARY_URL")
 
@@ -15,4 +15,4 @@ fi
 
 echo "Downloading ngx_pagespeed PSOL ${NGINX_PAGESPEED_VERSION} from ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME}..."
 
-wget -O - ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME} | tar zxf - -C /tmp/ngx_pagespeed-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}
+wget -O - ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME} -no-check-certificate | tar zxf - -C /tmp/ngx_pagespeed-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}
