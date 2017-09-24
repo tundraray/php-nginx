@@ -23,7 +23,7 @@ COPY scripts/download_pagespeed.sh /app/bin/download_pagespeed.sh
 COPY scripts/cloudflare-ip-updater.sh /app/bin/cloudflare-ip-updater.sh
 
 
-RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
+RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && CONFIG="\
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
