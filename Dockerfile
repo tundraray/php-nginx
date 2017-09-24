@@ -11,10 +11,16 @@ ENV LUA_MODULE_VERSION 0.10.10
 ENV DEVEL_KIT_MODULE_VERSION 0.3.0
 ENV LUAJIT_LIB=/usr/lib
 ENV LUAJIT_INC=/usr/include/luajit-2.0
+ENV NGINX_PAGESPEED_VERSION latest
+ENV NGINX_PAGESPEED_RELEASE_STATUS stable
+
+ENV WEBSITE_HOSTNAME example.com
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 
+COPY scripts/download_pagespeed.sh /app/bin/download_pagespeed.sh
+COPY scripts/cloudflare-ip-updater.sh /app/bin/cloudflare-ip-updater.sh
 
 
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
@@ -63,10 +69,12 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     --with-compat \
     --with-file-aio \
     --with-http_v2_module \
+    --add-module=/tmp/ngx_pagespeed-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS} \
     --add-module=/usr/src/ngx_devel_kit-$DEVEL_KIT_MODULE_VERSION \
     --add-module=/usr/src/lua-nginx-module-$LUA_MODULE_VERSION \
   " \
   && addgroup -S nginx \
+  && /app/bin/download_pagespeed.sh \
   && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \ 
   && apk add --no-cache --virtual .build-deps \
     autoconf \
@@ -134,6 +142,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && strip /usr/sbin/nginx* \
   && strip /usr/lib/nginx/modules/*.so \
   && rm -rf /usr/src/nginx-$NGINX_VERSION \
+  && rm -Rf /tmp/* \
   \
   # Bring in gettext so we can get `envsubst`, then throw
   # the rest away. To do this, we need to install `gettext`
@@ -230,6 +239,7 @@ ADD conf/supervisord.conf /etc/supervisord.conf
 # Copy our nginx config
 RUN rm -Rf /etc/nginx/nginx.conf
 ADD conf/nginx.conf /etc/nginx/nginx.conf
+ADD conf/server.d /etc/nginx/server.d
 
 # nginx site conf
 RUN mkdir -p /etc/nginx/sites-available/ && \

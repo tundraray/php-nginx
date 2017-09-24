@@ -2,5 +2,6 @@ pipeline:
   publish:
     image: plugins/docker
     repo: tundraray/wordpress-nginx
+    registry: docker.io
     tags:
       - latest
