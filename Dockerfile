@@ -69,7 +69,6 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
     --with-compat \
     --with-file-aio \
     --with-http_v2_module \
-    --add-module=/tmp/ngx_pagespeed-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS} \
     --add-module=/usr/src/ngx_devel_kit-$DEVEL_KIT_MODULE_VERSION \
     --add-module=/usr/src/lua-nginx-module-$LUA_MODULE_VERSION \
   " \
@@ -118,7 +117,7 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && tar -zxC /usr/src -f eaccelerator.tar.gz \
   && rm nginx.tar.gz ndk.tar.gz lua.tar.gz eaccelerator.tar.gz \ 
   && cd /usr/src/nginx-$NGINX_VERSION \
-  && ./configure $CONFIG \
+  && ./configure $CONFIG --with-debug \
   && make -j$(getconf _NPROCESSORS_ONLN) \
   && mv objs/nginx objs/nginx-debug \
   && mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so \
