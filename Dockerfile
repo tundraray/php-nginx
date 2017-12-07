@@ -235,7 +235,10 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     apk del gcc musl-dev linux-headers libffi-dev augeas-dev python-dev make autoconf
 #    ln -s /usr/bin/php7 /usr/bin/php
 
-RUN cd /usr/src/eaccelerator-0.9.5.1 && phpize && ./configure --with-eaccelerator-shared-memory --with-php-config=/usr/bin/php-config && make && make install 
+RUN cd /usr/src/eaccelerator-0.9.5.1 && \
+  phpize && ./configure --with-eaccelerator-shared-memory --with-php-config=/usr/local/bin/php-config && \
+  make && make install 
+# /usr/src/eaccelerator-0.9.5.1/modules
 
 ADD conf/supervisord.conf /etc/supervisord.conf
 
@@ -256,6 +259,20 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "post_max_size = 100M"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
     echo "memory_limit = 128M"  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    echo "zend_extension=/usr/lib/php4/eaccelerator.so" >> ${php_vars} && \
+    echo "eaccelerator.shm_size = 16"  >> ${php_vars} && \
+    echo "eaccelerator.cache_dir = /tmp/eaccelerator"  >> ${php_vars} && \
+    echo "eaccelerator.enable = 1"  >> ${php_vars} && \
+    echo "eaccelerator.optimizer = 1"  >> ${php_vars} && \
+    echo "eaccelerator.check_mtime = 1"  >> ${php_vars} && \
+    echo "eaccelerator.debug = 0"  >> ${php_vars} && \
+    echo "eaccelerator.shm_ttl = 0"  >> ${php_vars} && \
+    echo "eaccelerator.shm_prune_period = 0"  >> ${php_vars} && \
+    echo "eaccelerator.shm_only = 0"  >> ${php_vars} && \
     sed -i \
         -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
         -e "s/pm.max_children = 5/pm.max_children = 4/g" \
