@@ -3,5 +3,6 @@ pipeline:
     image: plugins/docker
     repo: tundraray/wordpress-nginx
     registry: docker.io
+    secrets: [ docker_username, docker_password ]
     tags:
       - latest
