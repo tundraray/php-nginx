@@ -94,7 +94,6 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
   && curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v$DEVEL_KIT_MODULE_VERSION.tar.gz -o ndk.tar.gz \
   && curl -fSL https://github.com/openresty/lua-nginx-module/archive/v$LUA_MODULE_VERSION.tar.gz -o lua.tar.gz \
-  && curl -fSL https://github.com/eaccelerator/eaccelerator/archive/0.9.5.1.tar.gz -o eaccelerator.tar.gz \
   && /app/bin/download_pagespeed.sh \
   && export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
@@ -114,8 +113,7 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && tar -zxC /usr/src -f nginx.tar.gz \
   && tar -zxC /usr/src -f ndk.tar.gz \
   && tar -zxC /usr/src -f lua.tar.gz \
-  && tar -zxC /usr/src -f eaccelerator.tar.gz \
-  && rm nginx.tar.gz ndk.tar.gz lua.tar.gz eaccelerator.tar.gz \ 
+  && rm nginx.tar.gz ndk.tar.gz lua.tar.gz \ 
   && cd /usr/src/nginx-$NGINX_VERSION \
   && ./configure $CONFIG --with-debug \
   && make -j$(getconf _NPROCESSORS_ONLN) \
@@ -235,11 +233,6 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     apk del gcc musl-dev linux-headers libffi-dev augeas-dev python-dev make autoconf
 #    ln -s /usr/bin/php7 /usr/bin/php
 
-RUN cd /usr/src/eaccelerator-0.9.5.1 && \
-  phpize && ./configure --with-eaccelerator-shared-memory --with-php-config=/usr/local/bin/php-config && \
-  make && make install 
-# /usr/src/eaccelerator-0.9.5.1/modules
-
 ADD conf/supervisord.conf /etc/supervisord.conf
 
 # Copy our nginx config
@@ -259,20 +252,6 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "post_max_size = 100M"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
     echo "memory_limit = 128M"  >> ${php_vars} && \
-    echo "memory_limit = 128M"  >> ${php_vars} && \
-    echo "memory_limit = 128M"  >> ${php_vars} && \
-    echo "memory_limit = 128M"  >> ${php_vars} && \
-    echo "memory_limit = 128M"  >> ${php_vars} && \
-    echo "extension=/usr/src/eaccelerator-0.9.5.1/modules/eaccelerator.so" >> ${php_vars} && \
-    echo "eaccelerator.shm_size = 16"  >> ${php_vars} && \
-    echo "eaccelerator.cache_dir = /tmp/eaccelerator"  >> ${php_vars} && \
-    echo "eaccelerator.enable = 1"  >> ${php_vars} && \
-    echo "eaccelerator.optimizer = 1"  >> ${php_vars} && \
-    echo "eaccelerator.check_mtime = 1"  >> ${php_vars} && \
-    echo "eaccelerator.debug = 0"  >> ${php_vars} && \
-    echo "eaccelerator.shm_ttl = 0"  >> ${php_vars} && \
-    echo "eaccelerator.shm_prune_period = 0"  >> ${php_vars} && \
-    echo "eaccelerator.shm_only = 0"  >> ${php_vars} && \
     sed -i \
         -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
         -e "s/pm.max_children = 5/pm.max_children = 4/g" \
