@@ -95,6 +95,7 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
   && curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v$DEVEL_KIT_MODULE_VERSION.tar.gz -o ndk.tar.gz \
   && curl -fSL https://github.com/openresty/lua-nginx-module/archive/v$LUA_MODULE_VERSION.tar.gz -o lua.tar.gz \
+  && curl -fSL https://github.com/eaccelerator/eaccelerator/archive/0.9.5.1.tar.gz -o eaccelerator.tar.gz \
   && /app/bin/download_pagespeed.sh \
   && export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
@@ -114,7 +115,8 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && tar -zxC /usr/src -f nginx.tar.gz \
   && tar -zxC /usr/src -f ndk.tar.gz \
   && tar -zxC /usr/src -f lua.tar.gz \
-  && rm nginx.tar.gz ndk.tar.gz lua.tar.gz \ 
+  && tar -zxC /usr/src -f eaccelerator.tar.gz \
+  && rm nginx.tar.gz ndk.tar.gz lua.tar.gz eaccelerator.tar.gz \ 
   && cd /usr/src/nginx-$NGINX_VERSION \
   && ./configure $CONFIG \
   && make -j$(getconf _NPROCESSORS_ONLN) \
@@ -233,6 +235,8 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     mkdir -p /var/log/supervisor && \
     apk del gcc musl-dev linux-headers libffi-dev augeas-dev python-dev make autoconf
 #    ln -s /usr/bin/php7 /usr/bin/php
+
+RUN cd /usr/src/eaccelerator-0.9.5.1 && phpize && ./configure --with-eaccelerator-shared-memory --with-php-config=/usr/bin/php-config && make && make install 
 
 ADD conf/supervisord.conf /etc/supervisord.conf
 
