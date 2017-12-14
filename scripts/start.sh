@@ -27,17 +27,6 @@ if [[ "$REAL_IP_HEADER" == "1" ]] ; then
  fi
 fi
 
- Configure pagespeed to support downstream caching
-# See: https://modpagespeed.com/doc/downstream-caching
-if [ "${PAGESPEED_REBEACON_KEY}" = "$DEFAULT_PAGESPEED_REBEACON_KEY" ]; then
-    _warning "nginx:  Pagespeed rebeacon key is default, please change \$PAGESPEED_REBEACON_KEY"
-else
-    _good "nginx:  PAGESPEED_REBEACON_KEY $PAGESPEED_REBEACON_KEY"
-fi
-sed -i -r "s/DownstreamCacheRebeaconingKey \"__PAGESPEED_REBEACON_KEY__\";/DownstreamCacheRebeaconingKey \"${PAGESPEED_REBEACON_KEY:-$DEFAULT_PAGESPEED_REBEACON_KEY}\";/g" /etc/nginx/server.d/10_pagespeed.conf
-
-
-
 # Increase the memory_limit
 if [ ! -z "$PHP_MEM_LIMIT" ]; then
  sed -i "s/memory_limit = 128M/memory_limit = ${PHP_MEM_LIMIT}M/g" /usr/local/etc/php/conf.d/docker-vars.ini

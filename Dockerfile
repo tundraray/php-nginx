@@ -19,7 +19,7 @@ ENV WEBSITE_HOSTNAME example.com
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 
-COPY scripts/download_pagespeed.sh /app/bin/download_pagespeed.sh
+#COPY scripts/download_pagespeed.sh /app/bin/download_pagespeed.sh
 COPY scripts/cloudflare-ip-updater.sh /app/bin/cloudflare-ip-updater.sh
 
 
@@ -94,7 +94,6 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
   && curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
   && curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v$DEVEL_KIT_MODULE_VERSION.tar.gz -o ndk.tar.gz \
   && curl -fSL https://github.com/openresty/lua-nginx-module/archive/v$LUA_MODULE_VERSION.tar.gz -o lua.tar.gz \
-  && /app/bin/download_pagespeed.sh \
   && export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
