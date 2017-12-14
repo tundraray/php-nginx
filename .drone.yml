@@ -1,7 +1,7 @@
 pipeline:
   publish:
     image: plugins/docker
-    repo: tundraray/wordpress-nginx
+    repo: tundraray/nginx
     registry: docker.io
     secrets: [ docker_username, docker_password ]
     tags:
