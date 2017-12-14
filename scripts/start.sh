@@ -4,7 +4,6 @@
 APP_HOSTNAME=${WEBSITE_HOSTNAME}
 
 _good "nginx:  server_name ${APP_HOSTNAME}"
-sed -i -r "s/example.com/${APP_HOSTNAME}/g" /etc/nginx/server.d/10_pagespeed.conf
 
 # Prevent config files from being filled to infinity by force of stop and restart the container
 lastlinephpconf="$(grep "." /usr/local/etc/php-fpm.conf | tail -1)"
