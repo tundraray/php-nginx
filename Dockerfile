@@ -1,4 +1,4 @@
-FROM php:5-fpm
+FROM php:5-fpm-alpine
 
 MAINTAINER Mikhail Andreev <tundraray@outlook.com>
 
