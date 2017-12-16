@@ -1,8 +1,8 @@
 pipeline:
   publish:
     image: plugins/docker
-    repo: tundraray/nginx
+    repo: tundraray/php
     registry: docker.io
     secrets: [ docker_username, docker_password ]
     tags:
-      - latest
+      - 5-nginx
