@@ -1,4 +1,4 @@
-FROM wordpress:php7.1-fpm-alpine
+FROM php:5-fpm
 
 MAINTAINER Mikhail Andreev <tundraray@outlook.com>
 
@@ -242,7 +242,7 @@ ADD conf/server.d /etc/nginx/server.d
 # nginx site conf
 RUN mkdir -p /etc/nginx/sites-available/ && \
 mkdir -p /etc/nginx/sites-enabled/ 
-ADD conf/nginx-wordpress.conf /etc/nginx/sites-available/default.conf
+ADD conf/nginx-php.conf /etc/nginx/sites-available/default.conf
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 # tweak php-fpm config
