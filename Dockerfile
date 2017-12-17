@@ -223,7 +223,7 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     #curl iconv session
 RUN docker-php-ext-install pdo_mysql pdo_sqlite mysqli mcrypt gd exif intl xsl json soap dom zip opcache sockets && \
     pecl install xdebug redis-3.1.3 imagick
-RUN docker-php-ext-enable redis imagick &&  \
+RUN docker-php-ext-enable imagick &&  \
     docker-php-source delete && \
     mkdir -p /etc/nginx && \
     mkdir -p /var/www/app && \
