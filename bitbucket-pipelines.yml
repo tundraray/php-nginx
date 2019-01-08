@@ -11,6 +11,15 @@ options:
 
 pipelines:
   default:
+    - step:
+      name: Push to docker
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - export IMAGE_NAME=tundraray/php-nginx
+        - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
     - parallel:
       - step:
           services:
@@ -19,8 +28,9 @@ pipelines:
             - docker  
           name: build php 5
           script:
-            - export IMAGE_NAME=tundraray/php-nginx
-            - docker build -t ${IMAGE_NAME}:5 --rm=true -f php5.Dockerfile . --pull=true
+            - export IMAGE_NAME=tundraray/php-nginx:5
+            - docker build -t $IMAGE_NAME --rm=true -f php5.Dockerfile . --pull=true
+            - docker push $IMAGE_NAME
       - step:
           services:
             - docker
@@ -30,14 +40,6 @@ pipelines:
           script:
             - export IMAGE_NAME=tundraray/php-nginx
             - docker build -t ${IMAGE_NAME}:7 -t ${IMAGE_NAME}:latest --rm=true -f php7.Dockerfile . --pull=true
+            - docker push $IMAGE_NAME:7
+            - docker push $IMAGE_NAME:latest
             #- docker build -t tundraray/php-nginx:7 -t tundraray/php-nginx:latest --rm=true -f php7.Dockerfile . --pull=true
-    - step:
-        name: Push to docker
-        services:
-          - docker
-        caches:
-          - docker
-        script:
-          - export IMAGE_NAME=tundraray/php-nginx
-          - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
-          - docker push $IMAGE_NAME
