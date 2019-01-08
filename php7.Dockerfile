@@ -85,7 +85,6 @@ RUN chmod 750 /app/bin/*.sh && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
     curl \
     gnupg \
     libxslt-dev \
-    libzip-dev \
     gd-dev \
     geoip-dev \
     perl-dev \
@@ -205,7 +204,8 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     libpng-dev \
     icu-dev \
     libpq \
-    libxslt-dev \
+    libxslt-dev \    
+    libzip-dev \
     libffi-dev \
     freetype-dev \
     sqlite-dev \
