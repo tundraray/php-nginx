@@ -12,13 +12,13 @@ options:
 pipelines:
   default:
     - step:
-      name: Docker setup
-      services:
-        - docker
-      caches:
-        - docker
-      script:
-        - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+        name: Docker setup
+        services:
+          - docker
+        caches:
+          - docker
+        script:
+          - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
     - parallel:
       - step:
           services:
