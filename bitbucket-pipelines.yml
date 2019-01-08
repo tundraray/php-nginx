@@ -22,6 +22,7 @@ pipelines:
           script:
             - export IMAGE_NAME=tundraray/php-nginx
             - docker build -t ${IMAGE_NAME}:7 -t ${IMAGE_NAME}:latest --rm=true -f php7.Dockerfile . --pull=true
+            #- docker build -t tundraray/php-nginx:7 -t tundraray/php-nginx:latest --rm=true -f php7.Dockerfile --pull=true
     - step:
         name: Push to docker
         services:
