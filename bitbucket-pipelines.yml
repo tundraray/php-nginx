@@ -13,11 +13,19 @@ pipelines:
   default:
     - parallel:
       - step:
+          services:
+            - docker
+          caches:
+            - docker  
           name: build php 5
           script:
             - export IMAGE_NAME=tundraray/php-nginx
             - docker build -t ${IMAGE_NAME}:5 --rm=true -f php5.Dockerfile . --pull=true
       - step:
+          services:
+            - docker
+          caches:
+            - docker  
           name: build php 7
           script:
             - export IMAGE_NAME=tundraray/php-nginx
