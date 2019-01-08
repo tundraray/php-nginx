@@ -11,14 +11,24 @@ options:
 
 pipelines:
   default:
+    - parallel:
+      - step:
+          name: build php 5
+          script:
+            - export IMAGE_NAME=tundraray/php-nginx
+            - docker build -t ${IMAGE_NAME}:5 --rm=true -f php5.Dockerfile . --pull=true
+      - step:
+          name: build php 7
+          script:
+            - export IMAGE_NAME=tundraray/php-nginx
+            - docker build -t ${IMAGE_NAME}:7 -t ${IMAGE_NAME}:latest --rm=true -f php7.Dockerfile . --pull=true
     - step:
-        script: # Modify the commands below to build your repository.
-          # Set $DOCKER_HUB_USERNAME and $DOCKER_HUB_PASSWORD as environment variables in repository settings
-          - export IMAGE_NAME=tundraray/wordpress-nginx:latest
-
-          # build the Docker image (this will use the Dockerfile in the root of the repo)
-          - docker build -t $IMAGE_NAME .
-          # authenticate with the Docker Hub registry
-          - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-          # push the new Docker image to the Docker registry
+        name: Push to docker
+        services:
+          - docker
+        caches:
+          - docker
+        script:
+          - export IMAGE_NAME=tundraray/php-nginx
+          - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
           - docker push $IMAGE_NAME
